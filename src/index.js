@@ -1,12 +1,38 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import { BrowserRouter, Route , Redirect} from "react-router-dom";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import  HomeView  from './components/views/Home';
+import user from './components/views/user';
+import { NestedView } from './components/views/Nested';
+import { NavBar } from './components/shared/navBar';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import reducers from './reducers/index'
+import thunk from 'redux-thunk';
+import postDetailView from './components/views/postDetailView';
+import UserDetailView from './components/views/UserDetailView';
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const store  = createStore(reducers,  applyMiddleware(thunk));
+
+class App extends Component {
+  render() {
+    return (
+        <Provider store = {store}> 
+      <BrowserRouter>
+        <div>
+          <NavBar />
+          <Redirect from = '/' to = '/posts' />
+          <Route exact path="/posts" component={HomeView} />
+          <Route exact path="/posts/:id" component={postDetailView} />
+          <Route path="/users" component={user} />
+          <Route path="/user/:id" component={UserDetailView} />
+          <Route path="/nested" component={NestedView} />
+        </div>
+      </BrowserRouter>
+        </Provider>
+    );
+  }
+}
+
+render(<App />, document.getElementById('root'));
