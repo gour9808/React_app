@@ -12,6 +12,8 @@ import reducers from './reducers/index'
 import thunk from 'redux-thunk';
 import postDetailView from './components/views/postDetailView';
 import UserDetailView from './components/views/UserDetailView';
+import PrivateRoute from './components/views/PrivateRoute';
+import { LoginPage } from './components/views/Login';
 
 const store  = createStore(reducers,  applyMiddleware(thunk));
 
@@ -23,7 +25,9 @@ class App extends Component {
         <div>
           <NavBar />
           <Redirect from = '/' to = '/posts' />
-          <Route exact path="/posts" component={HomeView} />
+          <PrivateRoute exact path="/posts" component={HomeView} />
+          <Route path="/login" component={LoginPage} />
+
           <Route exact path="/posts/:id" component={postDetailView} />
           <Route path="/users" component={user} />
           <Route path="/user/:id" component={UserDetailView} />
